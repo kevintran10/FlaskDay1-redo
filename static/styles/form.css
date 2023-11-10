@@ -1,6 +1,10 @@
 * {
     box-sizing: border-box;
   }
+  .form-control {
+  text-align: center;
+  }
+
   body {
     display: grid;
     place-items: center;
@@ -9,7 +13,7 @@
   }
   .pokeball {
     display: block;
-    margin-left: 40%;
+    margin-left: 43%;
     color: red;
     font-weight: 100;
     width: 192px;

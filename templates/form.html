@@ -16,10 +16,10 @@ Pokedex Finder
         <div class="mb-3">
           <!-- <label for="pkmnLabel" class="form-label">Who's that Pokemon?!</label> -->
           <a href=""><img src="https://fontmeme.com/permalink/231110/d43209e3e7b43d7061b99ea30dd53906.png" alt="pokemon-font" ></a>
-          <input type="text" class="form-control" id="pkmnLabel" name="pokemon_name">
+          <input type="text" placeholder="Enter Pokemon name" class="form-control" id="pkmnLabel" name="pokemon_name">
         </div>
 
-        <button type="submit" class="pokeball">Press</button>
+        <button type="submit" class="pokeball"><em></em></button>
     </form>
     <table class="table">
         <thead>
@@ -33,15 +33,14 @@ Pokedex Finder
           </tr>
         </thead>
         <tbody>
-            {% for pokemon in poke_data %}
+            {% for pokemon in all_pokemon %}
           <tr>
-            <th scope="row"> {{  poke_data['pokemon_name'] }}</th>
             <td>{{ pokemon['name'] }}</td>
-            <td>{{ pokemon['ability'] }}</td>
-            <td>{{ pokemon['hp'] }}</td>
-            <td>{{ pokemon['attack'] }}</td>
-            <td>{{ pokemon['defense'] }}</td>
-            <td><img src="{{ pokemon['shiny_sprite_url'] }}" alt="shiny_sprite"></td>
+            <td>{{ pokemon['ability_name'] }}</td>
+            <td>{{ pokemon['hp_base_stat'] }}</td>
+            <td>{{ pokemon['attack_base_stat'] }}</td>
+            <td>{{ pokemon['defense_base_stat'] }}</td>
+            <td><img src="{{ pokemon['sprites'] }}" alt="shiny_sprite"></td>
           </tr>
             {% endfor %}
         </tbody>
