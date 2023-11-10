@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+
+    <link rel="stylesheet" href="../static/styles/login.css">
+    <link rel="stylesheet" href="../static/styles/form.css">
+
+{% endblock %}
+
+{% block title %}
+Pokedex Finder
+{% endblock %}
+
+{% block content %}
+    <form method='POST'>
+        <div class="mb-3">
+          <!-- <label for="pkmnLabel" class="form-label">Who's that Pokemon?!</label> -->
+          <a href=""><img src="https://fontmeme.com/permalink/231110/d43209e3e7b43d7061b99ea30dd53906.png" alt="pokemon-font" ></a>
+          <input type="text" class="form-control" id="pkmnLabel" name="pokemon_name">
+        </div>
+
+        <button type="submit" class="pokeball">Press</button>
+    </form>
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Ability</th>
+            <th scope="col">HP</th>
+            <th scope="col">Attack</th>
+            <th scope="col">Defense</th>
+            <th scope="col">Front Shiny Sprite</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for pokemon in poke_data %}
+          <tr>
+            <th scope="row"> {{  poke_data['pokemon_name'] }}</th>
+            <td>{{ pokemon['name'] }}</td>
+            <td>{{ pokemon['ability'] }}</td>
+            <td>{{ pokemon['hp'] }}</td>
+            <td>{{ pokemon['attack'] }}</td>
+            <td>{{ pokemon['defense'] }}</td>
+            <td><img src="{{ pokemon['shiny_sprite_url'] }}" alt="shiny_sprite"></td>
+          </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+{% endblock %}
