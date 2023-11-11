@@ -1,7 +1,7 @@
 from flask import request, render_template
 import requests
 from app import app
-from app.forms import LoginForm
+from app.forms import LoginForm, SignupForm
 
 # Home Route
 @app.route('/')
@@ -30,6 +30,24 @@ def login():
             return 'Invalid email or password, please try again'
     else:
             return render_template('login.html', form=form)
+    
+# Sign up
+@app.route('/signup', methods=(['GET', 'POST']))
+def signup():
+    form = SignupForm()
+    if request.method == 'POST' and form.validate_on_submit():
+        full_name = f'{form.first_name.data} {form.last_name.data}'
+        email = form.email.data
+        password = form.password.data
+
+        REGISTERED_USER[email] = {
+            'name': full_name,
+            'password': password
+        }
+        return f'Thank you for signing up Pokemon Master {full_name}!'
+    else:
+        return render_template('signup.html', form=form)
+
 
 # Pokemon Name/Pokedex Route  
 @app.route('/pokemon_name', methods=['GET', 'POST'])
