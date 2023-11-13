@@ -1,12 +1,15 @@
-from flask import request, render_template
+from flask import request, render_template, redirect, url_for, flash
 import requests
 from app import app
 from app.forms import LoginForm, SignupForm
+from app.models import User, db
+from werkzeug.security import check_password_hash
+from flask_login import login_user, logout_user, current_user, login_required
 
 # Home Route
 @app.route('/')
 @app.route('/home')
-def hello_pokemon_master():
+def home():
     return render_template('home.html')
 
 REGISTERED_USER = {
@@ -24,9 +27,12 @@ def login():
         email = form.email.data
         password = form.password.data
 
-        if email in REGISTERED_USER and REGISTERED_USER[email]['password'] == password:
-            return f'Hello Pokemon Master, {REGISTERED_USER[email]["name"]}'
-        else:
+        queried_user = User.query.filter(User.email == email).first()
+        if queried_user and check_password_hash(queried_user.password, password):
+            login_user(queried_user)
+            flash(f'Hello, Pokemon Master {queried_user.first_name}!', 'success')
+            return redirect(url_for('home'))
+        else:          
             return 'Invalid email or password, please try again'
     else:
             return render_template('login.html', form=form)
@@ -36,18 +42,33 @@ def login():
 def signup():
     form = SignupForm()
     if request.method == 'POST' and form.validate_on_submit():
-        full_name = f'{form.first_name.data} {form.last_name.data}'
+        first_name = form.first_name.data
+        last_name = form.last_name.data
         email = form.email.data
         password = form.password.data
+        
+        # creating an instance of our User Class
+        user = User(first_name, last_name, email, password)
 
-        REGISTERED_USER[email] = {
-            'name': full_name,
-            'password': password
-        }
-        return f'Thank you for signing up Pokemon Master {full_name}!'
+        db.session.add(user)
+        db.session.commit()
+        # REGISTERED_USER[email] = {
+        #     'name': full_name,
+        #     'password': password
+        # }
+
+        flash(f'Thank you for signing up {first_name}!', 'success')
+        return redirect(url_for('login'))
     else:
         return render_template('signup.html', form=form)
 
+# creating a logout route
+@app.route('/logout')
+@login_required
+def logout():
+    flash('Pokemon Master {first_name} has logged out', 'warning')
+    logout_user()
+    return redirect(url_for('login'))
 
 # Pokemon Name/Pokedex Route  
 @app.route('/pokemon_name', methods=['GET', 'POST'])

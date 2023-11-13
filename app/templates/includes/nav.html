@@ -6,17 +6,25 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        {% if current_user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="/">Home</a>
+          {{ current_user.first_name }}
+            <a class="btn btn-danger" href="{{ url_for('logout') }}">Logout</a>
           </li> 
-          <li class="nav-item">
-            <a class="nav-link" href="/login">Login</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/pokemon_name">Pokemon</a>
-          </li>
-         
-        </form>
-      </div>
+        {% endif %}
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="{{ url_for('home') }}">Home</a> 
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('signup') }}">Sign-Up</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('get_pokemon_name') }}">Pokemon Look-up</a>
+        </li>
+      </form>
     </div>
-  </nav>
+  </div>
+</nav>

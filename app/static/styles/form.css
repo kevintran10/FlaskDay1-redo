@@ -1,15 +1,19 @@
 * {
     box-sizing: border-box;
+    font-family: 'Pokemon Solid', sans-serif;
   }
   .form-control {
   text-align: center;
   }
 
+
+
   body {
     display: grid;
     place-items: center;
     min-height: 100vh;
-    background: #f3dd85;
+    background: rgb(248, 226, 138);
+  
   }
   .pokeball {
     display: block;
