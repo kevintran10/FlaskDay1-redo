@@ -2,8 +2,8 @@
 
 {% block styles %}
 
-    <!-- <link rel="stylesheet" href="../static/styles/login.css"> -->
-  <link rel="stylesheet" href="../static/styles/form.css">
+
+<link rel="stylesheet" href="../static/styles/form.css">
 
 {% endblock %}
 
@@ -12,40 +12,42 @@ Pokedex Finder
 {% endblock %}
 
 {% block content %}
-  {% include './includes/nav.html' %}
-  <!-- <img src="https://wallpapers.com/images/hd/pokemon-background-17x8jxp3vmf1tef0.jpg" class="psearch" alt=""> -->
-<form method='POST'>     
+{% include './includes/nav.html' %}
+<img src="https://fontmeme.com/permalink/231110/d43209e3e7b43d7061b99ea30dd53906.png" alt="pokemon-font">
+<form method='POST'>
+    {{ form.hidden_tag() }}
     <div class="mb-3">
-        <a href=""><img src="https://fontmeme.com/permalink/231110/d43209e3e7b43d7061b99ea30dd53906.png" alt="pokemon-font" ></a>
-        <input type="text" placeholder="Enter Pokemon name" class="form-control" id="pkmnLabel" name="pokemon_name">
-        <button type="submit" class="pokeball"><em></em></button>
+        {{ form.name(class="form-control") }}
+
+        {{ form.search_btn(class="pokeball", placeholder="Please Enter Pokemon Name") }}
+        
     </div>
 </form>
-    {% if poke %}
- 
-    <table class="table">
-        <thead>
-          <tr>
+{% if poke %}
+
+<table class="table">
+    <thead>
+        <tr>
             <th scope="col">Name</th>
             <th scope="col">Ability</th>
             <th scope="col">HP</th>
             <th scope="col">Attack</th>
             <th scope="col">Defense</th>
             <th scope="col">Front Shiny Sprite</th>
-          </tr>
-        </thead>
-        <tbody>
-            
-          <tr>
-            <td>{{ pokemon['poke.name'] }}</td>
-            <td>{{ pokemon['poke.ability_name'] }}</td>
-            <td>{{ pokemon['poke.hp_base_stat'] }}</td>
-            <td>{{ pokemon['poke.attack_base_stat'] }}</td>
-            <td>{{ pokemon['poke.defense_base_stat'] }}</td>
+        </tr>
+    </thead>
+    <tbody>
+
+        <tr>
+            <td>{{ poke.name }}</td>
+            <td>{{ poke.ability_name }}</td>
+            <td>{{ poke.hp_base_stat }}</td>
+            <td>{{ poke.attack_base_stat }}</td>
+            <td>{{ poke.defense_base_stat }}</td>
             <td><img src="{{ poke.sprites }}" alt="shiny_sprite"></td>
-          </tr>
-        </tbody>
-      </table>
- 
-    {% endif %}
+        </tr>
+    </tbody>
+</table>
+
+{% endif %}
 {% endblock %}

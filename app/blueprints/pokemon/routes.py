@@ -19,11 +19,12 @@ def get_pokemon_name():
     form = SearchPokemonForm()
     if request.method == 'POST' and form.validate_on_submit():
         pokemon_name= form.name.data.lower()
-        poke_query = Pokemon.query.get(pokemon_name)
+        print(pokemon_name)
+        poke_query = Pokemon.query.filter(Pokemon.name==pokemon_name).first()
+        print(poke_query)
         if poke_query:
-            return  render_template('pokemon_name.html', poke_query=poke_query, form=form)
+            return  render_template('pokemon_name.html', poke=poke_query, form=form)
         else:
-            pokemon_name = form.name.data.lower()
             try:
                 url = f'https://pokeapi.co/api/v2/pokemon/{pokemon_name}'
                 response = requests.get(url)
@@ -47,6 +48,7 @@ def get_pokemon_name():
                 return render_template('pokemon_name.html', form=form)
     else:
         return render_template('pokemon_name.html', form=form)
+
 
 @pokemon.route('/catch/<int:pokemon_id>', methods=['POST'])
 @login_required
