@@ -1,6 +1,6 @@
 from . import pokemon
-from flask import render_template, request
-from flask_login import login_required
+from flask import render_template, request, flash, redirect, url_for
+from flask_login import login_required, current_user
 import requests
 from app.models import Pokemon, db
 from .forms import SearchPokemonForm
@@ -53,12 +53,54 @@ def get_pokemon_name():
 @pokemon.route('/catch/<int:pokemon_id>', methods=['POST'])
 @login_required
 def catch_Pokemon(pokemon_id):
-    
-    pass
+# query the Pokemon from the database using .filter because using id
+    try:
+        caught_pokemon = Pokemon.query.filter(id=pokemon_id).first()
 
+# create boolean statements for caught or not
+        if not caught_pokemon:
+            flash(f"{pokemon_id} isn't on your team!", "danger")
+            return redirect(url_for('pokemon.home'))
+        
+        if caught_pokemon in current_user.pokmeon: 
+            flash(f"{pokemon_id} is already on your team!", "warning")
+            return redirect(url_for('pokemon.home'))
+        
+# add to the team
+        current_user.pokemon.append(caught_pokemon)
+        
+        db.session.commit()
+        flash(f"Hooray! You have caught {caught_pokemon.name}!", "success")
+        return redirect(url_for('pokemon.home'))
+
+    except: 
+        flash(f"Oopsy! Invalid, try again.", "danger")
+        return redirect(url_for('pokemon.home'))
 
 
 @pokemon.route('/release/<int:pokemon_id>', methods=['POST'])
 @login_required
 def release_Pokemon(pokemon_id):
-    pass
+    try:
+# query the Pokemon from database again using .filter method because of id
+        rel_pokemon = Pokemon.query.filter(id=pokemon_id)
+
+# create a boolean(if statement) to check if the pokemon IS on the team
+        if not rel_pokemon:
+            flash(f"{pokemon_id} is not available!", "danger")
+            return redirect(url_for('pokemon.hom'))
+        
+        if rel_pokemon not in current_user.pokemon:
+            flash(f"{pokemon_id} is not currently on your team!", "warning")
+            return redirect(url_for('pokemon.home'))
+
+# remove from the team
+        current_user.pokemon.remove(rel_pokemon)
+        
+        db.session.commit()
+        flash(f"You have released {rel_pokemon.name} from your team!", 'success')
+        return redirect(url_for('pokemon.home'))
+    except: 
+        flash(f"Oopsy! Invalid, try again.", "danger")
+        return redirect(url_for('pokemon.home'))
+   
